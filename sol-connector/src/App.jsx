@@ -77,13 +77,13 @@ const SubtleWalletButton = styled(WalletMultiButton)(({ theme }) => ({
   marginTop: theme.spacing(3),
   marginBottom: theme.spacing(1),
   borderRadius: theme.shape.borderRadius,
-  background: theme.palette.primary.main, // Match surrounding blue
+  background: '#4F46E5', // Custom purple to match UI
   color: '#fff',
   fontWeight: 600,
   fontSize: 16,
-  boxShadow: '0 2px 8px 0 rgba(129, 182, 235, 0.1)',
+  boxShadow: '0 2px 8px 0 rgba(96,165,250,0.10)',
   '&:hover': {
-    background: theme.palette.primary.dark, // Slightly darker blue on hover
+    background: '#4338CA', // Slightly darker purple on hover
   },
 }));
 
