@@ -47,7 +47,7 @@ const subtleDarkTheme = createTheme({
       paper: '#1e293b',
     },
     primary: {
-      main: '#60a5fa', // Muted blue
+      main: '#60a5fa',
     },
     text: {
       primary: '#fff',
@@ -58,7 +58,7 @@ const subtleDarkTheme = createTheme({
     borderRadius: 16,
   },
   typography: {
-    fontFamily: 'Space Mono, monospace',
+    // fontFamily: 'Space Mono, monospace', // Removed custom font, using default
   },
 });
 
