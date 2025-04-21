@@ -11,6 +11,7 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
+import '@fontsource/space-mono';
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 import {
@@ -57,7 +58,7 @@ const subtleDarkTheme = createTheme({
     borderRadius: 16,
   },
   typography: {
-    fontFamily: 'Inter, Roboto, sans-serif',
+    fontFamily: 'Space Mono, monospace',
   },
 });
 
@@ -80,7 +81,7 @@ const SubtleWalletButton = styled(WalletMultiButton)(({ theme }) => ({
   color: '#fff',
   fontWeight: 600,
   fontSize: 16,
-  boxShadow: '0 2px 8px 0 rgba(96,165,250,0.10)',
+  boxShadow: '0 2px 8px 0 rgba(129, 182, 235, 0.1)',
   '&:hover': {
     background: theme.palette.primary.dark, // Slightly darker blue on hover
   },
@@ -168,25 +169,39 @@ function Content() {
           <SubtleCard>
             <Avatar sx={{
               bgcolor: 'primary.main',
-              width: 60,
-              height: 60,
+              width: 64,
+              height: 64,
               mb: 2,
+              mx: 'auto',
+              boxShadow: 3,
             }}>
               <AccountBalanceWalletIcon fontSize="large" />
             </Avatar>
-            <Typography variant="h4" fontWeight={700} gutterBottom sx={{ color: '#fff', mb: 1 }}>
-              Solana Wallet Connect
+            <Typography
+              variant="h5"
+              fontWeight={700}
+              gutterBottom
+              sx={{
+                color: '#fff',
+                mb: 2,
+                textAlign: 'center',
+                fontFamily: 'Inter, Roboto, sans-serif',
+                letterSpacing: 0.5,
+                lineHeight: 1.2,
+              }}
+            >
+              Instantly connect your Solana wallet<br />and view your balance.
             </Typography>
-            <SubtleWalletButton fullWidth />
+            <SubtleWalletButton fullWidth sx={{ fontSize: 18, py: 1.5, borderRadius: 2, mb: 2 }} />
             <WalletInfo />
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
               <IconButton
                 component="a"
-                href="https://discord.com/users/againtslawlight" // Replace with your Discord link
+                href="https://discord.com/users/againstlawlight"
                 target="_blank"
                 rel="noopener"
                 color="primary"
-                sx={{ fontSize: 36 }}
+                sx={{ fontSize: 38, bgcolor: '#23272a', borderRadius: 2, p: 1, transition: 'background 0.2s', '&:hover': { bgcolor: '#5865f2', color: '#fff' } }}
               >
                 <DiscordIcon fontSize="inherit" />
               </IconButton>
