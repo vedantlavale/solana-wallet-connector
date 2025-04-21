@@ -37,7 +37,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { styled } from "@mui/material/styles";
 
-const darkTheme = createTheme({
+const subtleDarkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
@@ -45,7 +45,7 @@ const darkTheme = createTheme({
       paper: '#1e293b',
     },
     primary: {
-      main: '#38bdf8',
+      main: '#60a5fa', // Muted blue
     },
     text: {
       primary: '#fff',
@@ -53,24 +53,35 @@ const darkTheme = createTheme({
     },
   },
   shape: {
-    borderRadius: 18,
+    borderRadius: 16,
   },
   typography: {
     fontFamily: 'Inter, Roboto, sans-serif',
   },
 });
 
-const StyledWalletButton = styled(WalletMultiButton)(({ theme }) => ({
+const SubtleCard = styled(Card)(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius * 1.5,
+  background: theme.palette.background.paper,
+  boxShadow: '0 4px 24px 0 rgba(30,41,59,0.25)',
+  border: `1.5px solid ${theme.palette.primary.main}22`,
+  padding: theme.spacing(4, 3),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+const SubtleWalletButton = styled(WalletMultiButton)(({ theme }) => ({
   marginTop: theme.spacing(3),
   marginBottom: theme.spacing(1),
   borderRadius: theme.shape.borderRadius,
-  background: '#334155',
+  background: theme.palette.primary.main, // Match surrounding blue
   color: '#fff',
   fontWeight: 600,
   fontSize: 16,
-  boxShadow: theme.shadows[2],
+  boxShadow: '0 2px 8px 0 rgba(96,165,250,0.10)',
   '&:hover': {
-    background: '#475569',
+    background: theme.palette.primary.dark, // Slightly darker blue on hover
   },
 }));
 
@@ -118,19 +129,24 @@ function Content() {
       sx={{
         minHeight: '100vh',
         width: '100vw',
-        background: 'linear-gradient(135deg, #0f172a, #1e293b)',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
         display: 'flex',
         flexDirection: 'column',
       }}
     >
       <AppBar position="static" elevation={0} sx={{
-        background: 'rgba(30,41,59,0.7)',
-        backdropFilter: 'blur(8px)',
-        boxShadow: '0 2px 16px 0 rgba(0,0,0,0.12)',
+        background: 'rgba(30,41,59,0.95)',
+        boxShadow: '0 2px 12px 0 rgba(96,165,250,0.10)',
+        borderBottom: '1px solid #334155',
       }}>
         <Toolbar>
-          <Avatar sx={{ bgcolor: 'primary.main', mr: 2, boxShadow: 2 }}>
-            <AccountBalanceWalletIcon />
+          <Avatar sx={{
+            bgcolor: 'primary.main',
+            mr: 2,
+            width: 44,
+            height: 44,
+          }}>
+            <AccountBalanceWalletIcon fontSize="medium" />
           </Avatar>
           <Typography variant="h6" fontWeight={700} sx={{ color: '#fff', letterSpacing: 1 }}>
             Solana Wallet
@@ -139,26 +155,21 @@ function Content() {
       </AppBar>
       <Container maxWidth="sm" sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Box width="100%">
-          <Card elevation={8} sx={{
-            bgcolor: 'background.paper',
-            borderRadius: 4,
-            p: { xs: 3, sm: 5 },
-            boxShadow: '0 4px 32px 0 rgba(0,0,0,0.25)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            minWidth: { xs: '90vw', sm: 400 },
-            maxWidth: 480,
-          }}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 64, height: 64, mb: 2, boxShadow: 2 }}>
+          <SubtleCard>
+            <Avatar sx={{
+              bgcolor: 'primary.main',
+              width: 60,
+              height: 60,
+              mb: 2,
+            }}>
               <AccountBalanceWalletIcon fontSize="large" />
             </Avatar>
             <Typography variant="h4" fontWeight={700} gutterBottom sx={{ color: '#fff', mb: 1 }}>
               Solana Wallet Connect
             </Typography>
-            <StyledWalletButton fullWidth />
+            <SubtleWalletButton fullWidth />
             <WalletInfo />
-          </Card>
+          </SubtleCard>
         </Box>
       </Container>
     </Box>
@@ -170,7 +181,7 @@ function App() {
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={subtleDarkTheme}>
       <CssBaseline />
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
