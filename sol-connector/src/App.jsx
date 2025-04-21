@@ -37,21 +37,44 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { styled } from "@mui/material/styles";
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#0f172a',
+      paper: '#1e293b',
+    },
+    primary: {
+      main: '#38bdf8',
+    },
+    text: {
+      primary: '#fff',
+      secondary: '#cbd5e1',
+    },
+  },
+  shape: {
+    borderRadius: 18,
+  },
+  typography: {
+    fontFamily: 'Inter, Roboto, sans-serif',
+  },
+});
+
 const StyledWalletButton = styled(WalletMultiButton)(({ theme }) => ({
-  marginTop: theme.spacing(2),
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(1),
   borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[2],
-  padding: theme.spacing(1, 3),
-  fontWeight: 500,
+  background: '#334155',
+  color: '#fff',
+  fontWeight: 600,
   fontSize: 16,
-  background: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
+  boxShadow: theme.shadows[2],
   '&:hover': {
-    background: theme.palette.primary.dark,
+    background: '#475569',
   },
 }));
 
-function WalletInfo({ loading }) {
+function WalletInfo() {
   const { publicKey } = useWallet();
   const { connection } = useConnection();
   const [balance, setBalance] = useState(null);
@@ -59,9 +82,9 @@ function WalletInfo({ loading }) {
   useEffect(() => {
     const fetchBalance = async () => {
       if (publicKey) {
-        setBalance(null); // reset before loading
+        setBalance(null);
         const lamports = await connection.getBalance(publicKey);
-        setBalance(lamports / 1e9); // Convert to SOL
+        setBalance(lamports / 1e9);
       }
     };
     fetchBalance();
@@ -70,83 +93,71 @@ function WalletInfo({ loading }) {
   if (!publicKey) return null;
 
   return (
-    <Card elevation={6} sx={{ mt: 4, borderRadius: 4, p: 2 }}>
-      <CardContent>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 56, height: 56 }}>
-              <AccountBalanceWalletIcon fontSize="large" />
-            </Avatar>
-          </Grid>
-          <Grid item xs>
-            <Typography variant="body1" color="text.secondary" gutterBottom fontWeight={600}>
-              Wallet Address
-            </Typography>
-            <Typography variant="body2" sx={{ wordBreak: 'break-all', fontWeight: 500 }}>
-              {publicKey.toBase58()}
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="body1" color="text.secondary" fontWeight={600}>
-              Balance
-            </Typography>
-            <Box display="flex" alignItems="center" minHeight={40}>
-              {balance === null ? (
-                <CircularProgress size={24} color="primary" />
-              ) : (
-                <Typography variant="h5" color="primary" fontWeight={700}>
-                  {balance?.toFixed(3) ?? '--'} SOL
-                </Typography>
-              )}
-            </Box>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+    <Box>
+      <Divider sx={{ mb: 2, bgcolor: 'primary.dark', opacity: 0.2 }} />
+      <Typography variant="subtitle2" color="text.secondary" gutterBottom fontWeight={600}>
+        Wallet Address
+      </Typography>
+      <Typography variant="body2" sx={{ wordBreak: 'break-all', color: 'text.primary', fontWeight: 500 }}>
+        {publicKey.toBase58()}
+      </Typography>
+      <Divider sx={{ my: 2, bgcolor: 'primary.dark', opacity: 0.2 }} />
+      <Typography variant="subtitle2" color="text.secondary" fontWeight={600}>
+        Balance
+      </Typography>
+      <Typography variant="h5" color="primary" fontWeight={700}>
+        {balance === null ? '--' : `${balance.toFixed(3)} SOL`}
+      </Typography>
+    </Box>
   );
 }
 
-function Content({ colorMode, mode }) {
-  const theme = useTheme();
-  const [loading, setLoading] = useState(false);
-
-  // Listen for balance loading state
-  // (handled in WalletInfo by showing spinner when balance is null)
-
+function Content() {
   return (
     <Box
       sx={{
         minHeight: '100vh',
-        background: mode === 'dark'
-          ? `linear-gradient(135deg, ${theme.palette.grey[900]}, ${theme.palette.grey[800]})`
-          : `linear-gradient(135deg, ${theme.palette.grey[100]}, ${theme.palette.grey[200]})`,
+        width: '100vw',
+        background: 'linear-gradient(135deg, #0f172a, #1e293b)',
         display: 'flex',
         flexDirection: 'column',
       }}
     >
-      <AppBar position="static" color="primary" elevation={2}>
+      <AppBar position="static" elevation={0} sx={{
+        background: 'rgba(30,41,59,0.7)',
+        backdropFilter: 'blur(8px)',
+        boxShadow: '0 2px 16px 0 rgba(0,0,0,0.12)',
+      }}>
         <Toolbar>
-          <Avatar sx={{ bgcolor: 'white', color: 'primary.main', mr: 2 }}>
+          <Avatar sx={{ bgcolor: 'primary.main', mr: 2, boxShadow: 2 }}>
             <AccountBalanceWalletIcon />
           </Avatar>
-          <Typography variant="h6" fontWeight={700} sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" fontWeight={700} sx={{ color: '#fff', letterSpacing: 1 }}>
             Solana Wallet
           </Typography>
-          <IconButton color="inherit" onClick={colorMode.toggleColorMode}>
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Container maxWidth="sm" sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Box width="100%">
-          <Card elevation={8} sx={{ borderRadius: 4, p: { xs: 2, sm: 4 }, boxShadow: 6 }}>
-            <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-              <Typography variant="h4" fontWeight={700} gutterBottom sx={{ mt: 1, fontFamily: 'Inter, Roboto, sans-serif' }}>
-                Solana Wallet Connect
-              </Typography>
-              <Divider sx={{ width: '100%', mb: 2 }} />
-              <StyledWalletButton fullWidth sx={{ mt: 1, mb: 2 }} />
-              <WalletInfo loading={loading} />
-            </Box>
+          <Card elevation={8} sx={{
+            bgcolor: 'background.paper',
+            borderRadius: 4,
+            p: { xs: 3, sm: 5 },
+            boxShadow: '0 4px 32px 0 rgba(0,0,0,0.25)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minWidth: { xs: '90vw', sm: 400 },
+            maxWidth: 480,
+          }}>
+            <Avatar sx={{ bgcolor: 'primary.main', width: 64, height: 64, mb: 2, boxShadow: 2 }}>
+              <AccountBalanceWalletIcon fontSize="large" />
+            </Avatar>
+            <Typography variant="h4" fontWeight={700} gutterBottom sx={{ color: '#fff', mb: 1 }}>
+              Solana Wallet Connect
+            </Typography>
+            <StyledWalletButton fullWidth />
+            <WalletInfo />
           </Card>
         </Box>
       </Container>
@@ -155,37 +166,16 @@ function Content({ colorMode, mode }) {
 }
 
 function App() {
-  const [mode, setMode] = useState('light');
-  const colorMode = {
-    toggleColorMode: () => setMode((prev) => (prev === 'light' ? 'dark' : 'light')),
-  };
-  const theme = useMemo(() =>
-    createTheme({
-      palette: {
-        mode,
-        primary: {
-          main: '#4f46e5',
-        },
-        background: {
-          default: mode === 'dark' ? '#18181b' : '#f3f4f6',
-          paper: mode === 'dark' ? '#23232a' : '#fff',
-        },
-      },
-      typography: {
-        fontFamily: 'Inter, Roboto, sans-serif',
-      },
-    }), [mode]);
-
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
           <WalletModalProvider>
-            <Content colorMode={colorMode} mode={mode} />
+            <Content />
           </WalletModalProvider>
         </WalletProvider>
       </ConnectionProvider>
